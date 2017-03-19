@@ -1,0 +1,65 @@
+<?php 
+
+use yii\helpers\Html;
+
+?>
+<center>
+	<form action="?r=company/tg_add" method="post">
+		<table>
+			<tr>
+				<td>
+					<select name="jobs_id" id="qy">
+						<option value="0">请选择企业</option>
+						<?php foreach($data as $v){ ?>
+							<option value="<?=$v['id']; ?>"><?=$v['companyname']; ?></option>
+						<?php } ?>
+					</select>
+				</td>
+				<td id="zw">
+					
+				</td>
+			</tr>
+			<tr>
+				<td>开始时间</td>
+				<td><input type="text" name="start_time"></td>
+			</tr>
+			<tr>
+				<td>结束时间</td>
+				<td><input type="text" name="end_time"></td>
+			</tr>
+			<tr>
+				<td>紧急还是推广</td>
+				<td>
+					<input type="radio" value="0" name="type">推广
+					<input type="radio" value="1" name="type">置顶
+				</td>
+			</tr>
+			<tr>
+				<td><input type="submit" value="提交"></td>
+				<td></td>
+			</tr>
+		</table>
+	</form>
+</center>
+<?=html::jsFile('@web/public/js/jquery-1.8.2.min.js');?>
+<script>
+	$(document).on('change','#qy',function(){
+		var qy=$(this).val();
+		$.ajax({
+			url:"index.php?r=company/zw",
+			data:{id:qy},
+			type:'get',
+			dataType:'json',
+			success:function(data){
+				var str='';
+				str+='<select name="com_id" id="">'
+				str+='<option value="0">请选择职位</option>'
+					$.each(data,function(i,v){
+						str+='<option value="'+v.id+'">'+v.jobs_name+'</option>'
+					})
+				str+='</select>'
+				$('#zw').html(str);
+			}
+		})
+	})
+</script>
